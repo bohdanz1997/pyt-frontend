@@ -1,30 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_USER':
-      return {
-        user: {
-          id: action.payload.userId,
-        },
-      }
-    case 'UPDATE_USER':
-      return {
-        user: {
-          id: state.user.id,
-          name: action.payload.userName,
-        },
-      }
-    default:
-      return {}
-  }
-}
+import {rootReducer} from './reducers'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export const configureStore = ({ initialState = {} } = {}) => {
   const store = createStore(
-    reducer,
+    rootReducer,
     initialState,
     composeEnhancers(applyMiddleware(...[])),
   )
@@ -43,7 +24,7 @@ export const configureStore = ({ initialState = {} } = {}) => {
     module.hot.accept('./reducers', () => {
       const next = require('./reducers')
 
-      store.replaceReducer(next.createReducer())
+      store.replaceReducer(next.rootReducer)
     })
   }
 
