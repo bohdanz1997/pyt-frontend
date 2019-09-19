@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { hot } from 'react-hot-loader'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Router } from 'react-router-dom'
+import { Routes } from './routes'
+import { AccountLoader } from '@features/common'
+import { history } from '@lib/routing'
 
 const Main = () => (
-  <BrowserRouter>
-    <div>
-      HELLO2
-    </div>
-  </BrowserRouter>
+  <Router history={history}>
+    <AccountLoader>
+      <Routes />
+    </AccountLoader>
+  </Router>
 )
 
 export const App = hot(module)(Main)

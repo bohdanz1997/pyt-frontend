@@ -5,9 +5,9 @@
     "target": "es2015",
     "baseUrl": "./src",
     "paths": {
-      "@features": ["./src/features"],
-      "@lib": ["./src/lib"],
-      "@ui": ["./src/ui"]
+      "@features/*": ["./features/*"],
+      "@lib/*": ["./lib/*"],
+      "@ui/*": ["./ui/*"]
     }
   }
 }
