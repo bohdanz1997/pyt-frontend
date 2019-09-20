@@ -1,8 +1,8 @@
 export const menuItems = [
   {
-    path: '/',
+    path: '/templates',
     icon: 'home',
-    text: 'Home',
+    text: 'Templates',
   },
   {
     path: '/calendar',

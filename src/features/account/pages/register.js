@@ -2,13 +2,15 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { Button, Card, Form, Input } from 'antd'
+import { Button, Form, Input } from 'antd'
 import { history } from '@lib/routing'
-import { MainTemplate, request } from '@features/common'
+import { MainTemplate, tokenChanged } from '@features/common'
+import { Card, CardTitle } from '@ui'
+import { accountApi, sessionApi } from '../api'
 
 export const RegisterPage = () => (
   <MainTemplate>
-    <Card title="Registration">
+    <Card title={<CardTitle>Registration</CardTitle>}>
       <RegisterForm />
     </Card>
   </MainTemplate>
@@ -27,16 +29,21 @@ const ErrorBox = styled.div`
   color: red;
 `
 
-const accountApi = {
-  createAccount: (data) => request('POST', '/users', { data }),
-}
-
-const sessionApi = {
-  createSession: (data) => request('POST', '/users/session', { data }),
-}
-
 const RegisterForm = () => {
   const [formError, setFormError] = useState(null)
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      await accountApi.createAccount(values)
+      const { result } = await sessionApi.createSession(values)
+
+      tokenChanged(result.token)
+      history.push('/workout')
+    } catch (err) {
+      setFormError(err.response.data)
+    }
+    setSubmitting(false)
+  }
 
   return (
     <Formik
@@ -45,18 +52,7 @@ const RegisterForm = () => {
         password: '',
       }}
       validationSchema={schema}
-      onSubmit={async (values, { setSubmitting }) => {
-        try {
-          await accountApi.createAccount(values)
-          const { result } = await sessionApi.createSession(values)
-
-          console.log('token', result.token)
-          history.push('/')
-        } catch (err) {
-          setFormError(err.response.data)
-        }
-        setSubmitting(false)
-      }}
+      onSubmit={handleSubmit}
     >
       {({
         values,

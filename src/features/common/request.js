@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
+import { $token } from './model/token'
 
 /**
  * @param {"GET"|"POST"|"PUT"|"PATCH"|"DELETE"} method
@@ -6,15 +7,15 @@ import axios, { AxiosRequestConfig } from 'axios'
  * @param {AxiosRequestConfig} options
  */
 export const request = async (method, url, options = {}) => {
-  const baseUrl = process.env.REACT_APP_API_HOST || 'http://localhost:8080/api' // || 'http://5c0c4d4a.ngrok.io/api'
-  const token = 'gg'
+  const baseUrl = process.env.REACT_APP_API_HOST
+  const token = $token.getState()
 
   const response = await axios({
     method,
     url: `${baseUrl}${url}`,
     ...options,
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `bearer ${token}`,
       ...options.headers,
     },
   })

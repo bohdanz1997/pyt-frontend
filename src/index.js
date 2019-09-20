@@ -1,34 +1,24 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { createGlobalStyle } from 'styled-components'
 import 'antd/dist/antd.css'
 
-import { App } from './App'
-import { configureStore } from './store'
-
-const GlobalStyles = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-  }
-`
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Router } from 'react-router-dom'
+import { history } from '@lib/routing'
+import { App } from './app'
 
 const root = document.getElementById('root')
-const store = configureStore()
 
 const render = () => {
   ReactDOM.render(
-    <Provider store={store}>
-      <GlobalStyles />
+    <Router history={history}>
       <App />
-    </Provider>,
+    </Router>,
     root,
   )
 }
 
 if (module.hot) {
-  module.hot.accept('./App', render)
+  module.hot.accept('./app', render)
 }
 
 render()
