@@ -1,118 +1,103 @@
-import React, { useEffect } from 'react'
-import { MainTemplate, request } from '@features/common'
-import { Button, Card, Form, Icon, Input } from 'antd'
-import { useStore } from 'effector-react'
-import { combine, createEffect, createEvent, createStore, createStoreObject, sample } from 'effector'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { Formik } from 'formik'
+import * as yup from 'yup'
+import { Button, Card, Form, Input } from 'antd'
 import { history } from '@lib/routing'
-import { createFetching } from '@lib/fetching'
+import { MainTemplate, request } from '@features/common'
 
-export const RegisterPage = () => {
-  useEffect(
-    () => {
-      request('GET', '/groups').then(console.log)
-    },
-    [],
-  )
+export const RegisterPage = () => (
+  <MainTemplate>
+    <Card title="Registration">
+      <RegisterForm />
+    </Card>
+  </MainTemplate>
+)
 
-  return (
-    <MainTemplate>
-      <Card title="Register">
-        <RegisterForm />
-      </Card>
-    </MainTemplate>
-  )
+const schema = yup.object().shape({
+  email: yup.string()
+    .email()
+    .required(),
+  password: yup.string()
+    .min(4)
+    .required(),
+})
+
+const ErrorBox = styled.div`
+  color: red;
+`
+
+const accountApi = {
+  createAccount: (data) => request('POST', '/users', { data }),
 }
 
-const emailChanged = createEvent()
-const passwordChanged = createEvent()
-const formSubmitted = createEvent()
-
-const registerProcessing = createEffect()
-const registerFetching = createFetching(registerProcessing)
-
-const $email = createStore('')
-const $emailError = $email.map((value) => {
-  if (value.length === 0) return 'Please, enter email'
-  return null
-})
-const $isEmailCorrect = $emailError.map(
-  (value) => value === null,
-)
-
-const $password = createStore('')
-const $passwordError = $password.map((value) => {
-  if (value.length === 0) return 'Please, enter password'
-  return null
-})
-const $isPasswordCorrect = $passwordError.map(
-  (value) => value === null,
-)
-
-const $form = createStoreObject({
-  email: $email,
-  password: $password,
-})
-
-const $isFormValid = combine(
-  $isEmailCorrect,
-  $isPasswordCorrect,
-  (isEmailCorrect, isPasswordCorrect) => isEmailCorrect && isPasswordCorrect,
-)
-
-const $isFormDisabled = registerFetching.isLoading
-const $isSubmitEnabled = combine(
-  $isFormValid,
-  registerFetching.isLoading,
-  (isFormValid, isregisterFetching) => isFormValid && !isregisterFetching,
-)
-
-const trimEvent = (event) => event.currentTarget.value.trim()
-
-$email.on(emailChanged.map(trimEvent), (_, email) => email)
-$password.on(passwordChanged.map(trimEvent), (_, password) => password)
-
-// called after form submitted
-sample(
-  createStoreObject({
-    isSubmitEnabled: $isSubmitEnabled,
-    form: $form,
-  }),
-  formSubmitted,
-).watch(({ isSubmitEnabled, form }) => {
-  if (isSubmitEnabled) registerProcessing(form)
-})
-
-registerProcessing.use((form) =>
-  request('POST', '/users', { data: form }).then(() =>
-    request('POST', '/users/session', { data: form })
-  )
-)
-
-registerProcessing.done.watch(({ result }) => {
-  history.push('/')
-})
-
-const handleSubmit = (event) => {
-  event.preventDefault()
-  formSubmitted()
+const sessionApi = {
+  createSession: (data) => request('POST', '/users/session', { data }),
 }
 
 const RegisterForm = () => {
-  const form = useStore($form)
-  const formError = useStore(registerFetching.error)
-  const isSubmitEnabled = useStore($isSubmitEnabled)
+  const [formError, setFormError] = useState(null)
 
   return (
-    <Form onSubmit={handleSubmit}>
-      {formError && (
-        <div>{mapServerToClientError(formError.error)}</div>
+    <Formik
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      validationSchema={schema}
+      onSubmit={async (values, { setSubmitting }) => {
+        try {
+          await accountApi.createAccount(values)
+          const { result } = await sessionApi.createSession(values)
+
+          console.log('token', result.token)
+          history.push('/')
+        } catch (err) {
+          setFormError(err.response.data)
+        }
+        setSubmitting(false)
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isSubmitting,
+      }) => (
+        <Form onSubmit={handleSubmit}>
+          {formError && (
+            <ErrorBox>
+              {mapServerToClientError(formError.error)}
+            </ErrorBox>
+          )}
+          <FormInput
+            name="email"
+            type="email"
+            autoComplete="email"
+            label="Email"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.email}
+            error={touched.email && errors.email}
+          />
+          <FormInput
+            name="password"
+            type="password"
+            autoComplete="password"
+            label="Password"
+            onChange={handleChange}
+            value={values.password}
+            error={touched.password && errors.password}
+          />
+          <PrimaryButton disabled={isSubmitting}>
+              Sign up
+          </PrimaryButton>
+        </Form>
       )}
-      <Email />
-      <Password />
-      <PrimaryButton disabled={!isSubmitEnabled}>
-        Sign up
-      </PrimaryButton>
-    </Form>
+    </Formik>
   )
 }
 
@@ -123,59 +108,23 @@ const PrimaryButton = ({ disabled, children }) => (
 )
 
 const FormInput = ({ prefix, error, placeholder, type, name, label, autoComplete, disabled, onChange, value }) => (
-  <>
-    <Form.Item className={error && 'has-error'} label={label}>
-      <Input
-        prefix={prefix}
-        placeholder={placeholder}
-        type={type}
-        name={name}
-        autoComplete={autoComplete}
-        disabled={disabled}
-        onChange={onChange}
-        value={value}
-        size="large"
-      />
-    </Form.Item>
+  <Form.Item className={error && 'has-error'} label={label}>
+    <Input
+      prefix={prefix}
+      placeholder={placeholder}
+      type={type}
+      name={name}
+      autoComplete={autoComplete}
+      disabled={disabled}
+      onChange={onChange}
+      value={value}
+      size="large"
+    />
     {(error) && (
       <div className="ant-form-explain">{error}</div>
     )}
-  </>
+  </Form.Item>
 )
-
-const Email = () => {
-  const email = useStore($email)
-  const emailError = useStore($emailError)
-
-  return (
-    <FormInput
-      name="email"
-      type="email"
-      autoComplete="email"
-      label="Email"
-      onChange={emailChanged}
-      value={email}
-      error={email && emailError}
-    />
-  )
-}
-
-const Password = () => {
-  const password = useStore($password)
-  const passwordError = useStore($passwordError)
-
-  return (
-    <FormInput
-      name="password"
-      type="password"
-      autoComplete="password"
-      label="Password"
-      onChange={passwordChanged}
-      value={password}
-      error={password && passwordError}
-    />
-  )
-}
 
 const mapServerToClientError = (error) => {
   switch (error) {
