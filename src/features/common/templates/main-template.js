@@ -5,19 +5,25 @@ import { Navigation } from '../layout/navigation'
 import { FixedFooter } from '../layout/fixed-footer'
 import { menuItems } from '../menu-config'
 
-export const MainTemplate = ({ children }) => (
-  <FullScreenLayout>
+export const MainTemplate = ({
+  children,
+  header = null,
+  layout: PageLayout = FullScreenLayout,
+}) => (
+  <PageLayout>
+    {header}
     <Content>{children}</Content>
     <FixedFooter>
       <Navigation menuItems={menuItems} />
     </FixedFooter>
-  </FullScreenLayout>
+  </PageLayout>
 )
 
-const FullScreenLayout = styled(Layout)`
+export const FullScreenLayout = styled(Layout)`
   min-height: 100vh;
+  padding-bottom: 64px;
 `
 
-const Content = styled(Layout.Content)`
-  padding: 10px;
+export const Content = styled(Layout.Content)`
+  padding: 0.5rem;
 `

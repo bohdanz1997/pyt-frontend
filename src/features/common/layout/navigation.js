@@ -18,7 +18,6 @@ export const Navigation = ({ menuItems }) => (
 const NavLink = ({ to, children }) => (
   <Route
     path={to}
-    exact={true}
     children={({ match }) => (
       <NavLinkStyled to={to} selected={Boolean(match)}>
         {children}

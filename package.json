@@ -75,6 +75,7 @@
     "react-hot-loader": "^4.8.4",
     "react-router-config": "^5.0.1",
     "react-router-dom": "^5.0.1",
+    "react-select": "^3.0.5",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",

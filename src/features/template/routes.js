@@ -1,8 +1,14 @@
-import { TemplatePage } from './pages/template'
+import { TemplateListPage } from './pages/list'
+import { CreateTemplatePage } from './pages/create'
 
 export const templateRoutes = () => [
   {
     path: '/templates',
-    component: TemplatePage,
+    exact: true,
+    component: TemplateListPage,
+  },
+  {
+    path: '/templates/create',
+    component: CreateTemplatePage,
   },
 ]
