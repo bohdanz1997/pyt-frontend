@@ -3,39 +3,13 @@ import * as yup from 'yup'
 import { Formik } from 'formik'
 import { Card, Form } from 'antd'
 import { useStore } from 'effector-react'
-import { createEvent } from 'effector'
 
 import { history } from '@lib/routing'
 import { ActionButton, FormInput } from '@ui'
-import { templateApi } from '@features/template/api'
 import { FixedHeaderTemplate, NavBackHeader } from '@features/common'
 import { $groupsExercises } from '@features/exercises'
+import { templateApi } from '../api'
 import { ExerciseTreeInput } from '../components/exercise-tree-input'
-
-const pageReady = createEvent()
-
-pageReady.watch(() => {
-})
-
-const handleSubmit = async (values, { setSubmitting, setStatus }) => {
-  try {
-    await templateApi.create(values)
-    history.push('/templates')
-  } catch (err) {
-    setStatus({
-      formError: err.response.data,
-    })
-  }
-  setSubmitting(false)
-}
-
-const schema = yup.object().shape({
-  name: yup.string()
-    .required(),
-  exercises: yup.array()
-    .min(1)
-    .required(),
-})
 
 export const CreateTemplatePage = () => (
   <FixedHeaderTemplate header={
@@ -72,7 +46,6 @@ const CreateTemplateForm = () => {
         setFieldValue,
         setFieldTouched,
         isSubmitting,
-        isValid,
       }) => (
         <Form onSubmit={handleSubmit}>
           <FormInput
@@ -91,15 +64,30 @@ const CreateTemplateForm = () => {
             onBlur={setFieldTouched}
             error={errors.exercises}
           />
-          {isValid && (
-            <ActionButton
-              icon="check"
-              loading={isSubmitting}
-              onClick={handleSubmit}
-            />
-          )}
+          <ActionButton
+            icon="check"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          />
         </Form>
       )}
     </Formik>
   )
 }
+
+const handleSubmit = async (values, { setSubmitting, setStatus }) => {
+  try {
+    await templateApi.create(values)
+    setSubmitting(false)
+    history.push('/templates')
+  } catch (err) {
+    setStatus({
+      formError: err.response.data,
+    })
+  }
+}
+
+const schema = yup.object().shape({
+  name: yup.string().required(),
+  exercises: yup.array().min(1).required(),
+})

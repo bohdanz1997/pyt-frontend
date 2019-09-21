@@ -15,30 +15,6 @@ export const RegisterPage = () => (
   </MainTemplate>
 )
 
-const schema = yup.object().shape({
-  email: yup.string()
-    .email()
-    .required(),
-  password: yup.string()
-    .min(4)
-    .required(),
-})
-
-const handleSubmit = async (values, { setSubmitting, setStatus }) => {
-  try {
-    await accountApi.createAccount(values)
-    const { result } = await sessionApi.createSession(values)
-
-    tokenChanged(result.token)
-    history.push('/workout')
-  } catch (err) {
-    setStatus({
-      formError: err.response.data,
-    })
-  }
-  setSubmitting(false)
-}
-
 const RegisterForm = () => (
   <Formik
     initialValues={{
@@ -92,6 +68,31 @@ const RegisterForm = () => (
     )}
   </Formik>
 )
+
+const schema = yup.object().shape({
+  email: yup.string()
+    .email()
+    .required(),
+  password: yup.string()
+    .min(4)
+    .required(),
+})
+
+const handleSubmit = async (values, { setSubmitting, setStatus }) => {
+  try {
+    await accountApi.createAccount(values)
+    const { result } = await sessionApi.createSession(values)
+
+    tokenChanged(result.token)
+    setSubmitting(false)
+    history.push('/workout')
+  } catch (err) {
+    setStatus({
+      formError: err.response.data,
+    })
+    setSubmitting(false)
+  }
+}
 
 const mapServerToClientError = (error) => {
   switch (error) {
