@@ -1,27 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { createEvent } from 'effector'
 import { useStore } from 'effector-react'
-import { Button, Card, Empty, Icon } from 'antd'
+import { Card, Empty, Icon } from 'antd'
 import { Link } from 'react-router-dom'
+
 import { MainTemplate } from '@features/common'
 import { $exercises } from '@features/exercises'
 import { ActionButton, ConditionalList, Text } from '@ui'
-import { $templates, loadTemplates, removeTemplate } from '../model'
-
-const pageReady = createEvent()
-
-pageReady.watch(() => {
-  loadTemplates()
-})
+import { $templates, removeTemplate } from '../model'
 
 export const TemplateListPage = () => {
   const templates = useStore($templates)
   const exercises = useStore($exercises)
-
-  useEffect(() => {
-    pageReady()
-  }, [])
 
   return (
     <MainTemplate>

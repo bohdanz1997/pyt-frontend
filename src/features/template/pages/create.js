@@ -8,8 +8,8 @@ import { history } from '@lib/routing'
 import { ActionButton, FormInput } from '@ui'
 import { FixedHeaderTemplate, NavBackHeader } from '@features/common'
 import { $groupsExercises } from '@features/exercises'
-import { templateApi } from '../api'
 import { ExerciseTreeInput } from '../components/exercise-tree-input'
+import { createTemplate } from '../model'
 
 export const CreateTemplatePage = () => (
   <FixedHeaderTemplate header={
@@ -77,7 +77,7 @@ const CreateTemplateForm = () => {
 
 const handleSubmit = async (values, { setSubmitting, setStatus }) => {
   try {
-    await templateApi.create(values)
+    await createTemplate(values)
     setSubmitting(false)
     history.push('/templates')
   } catch (err) {
