@@ -1,8 +1,8 @@
 import { request } from '@features/common'
 
 export const workoutApi = {
-  create: (templateId) =>
-    request('POST', '/workouts', { data: { templateId } }),
+  create: (workoutData) =>
+    request('POST', '/workouts', { data: workoutData }),
 
   getList: () => request('GET', '/workouts'),
 
