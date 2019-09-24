@@ -11,3 +11,9 @@ export const arrayToObject = (items) =>
     object[item.id] = item
     return object
   }, {})
+
+export const removeById = (array, id) =>
+  array.filter((item) => item.id !== id)
+
+export const replaceById = (array, id, newItem) =>
+  array.map((item) => item.id === id ? newItem : item)
