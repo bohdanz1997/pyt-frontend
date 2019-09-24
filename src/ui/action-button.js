@@ -16,10 +16,6 @@ const InnerButton = styled(({ size, ...props }) => <Button {...props} />)`
     height: 3rem;
     font-size: 20px;
   `}
-
-  ${({ loading }) => loading && css`
-    position: fixed !important;
-  `}
 `
 
 export const ActionButton = ({ icon, loading, onClick, size = 'normal' }) => (
