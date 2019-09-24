@@ -4,14 +4,16 @@ import * as yup from 'yup'
 import { Form } from 'antd'
 import { history } from '@lib/routing'
 import { MainTemplate, Header, tokenChanged } from '@features/common'
-import { Card, ErrorBox, FormInput, FormPassword, PrimaryButton } from '@ui'
+import { Row, Card, ErrorBox, FormInput, FormPassword, PrimaryButton, Col } from '@ui'
 import { accountApi, sessionApi } from '../api'
 
 export const RegisterPage = () => (
   <MainTemplate header={<Header>Registration</Header>}>
-    <Card>
-      <RegisterForm />
-    </Card>
+    <Row padding="0.5rem">
+      <Card>
+        <RegisterForm />
+      </Card>
+    </Row>
   </MainTemplate>
 )
 

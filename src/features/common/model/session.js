@@ -22,5 +22,5 @@ $session
   .on(loadSession.done, (_, { result }) => result.result)
   .on(loadSession.fail, () => null)
 
-forward({ from: loadSession.fail, to: tokenDropped })
-forward({ from: sessionDropped, to: tokenDropped })
+// forward({ from: loadSession.fail, to: tokenDropped })
+// forward({ from: sessionDropped, to: tokenDropped })

@@ -24,6 +24,4 @@ export const FullScreenLayout = styled(Layout)`
   padding-bottom: 64px;
 `
 
-export const Content = styled(Layout.Content)`
-  padding: 0.5rem;
-`
+export const Content = styled(Layout.Content)``
