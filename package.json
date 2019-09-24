@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start-dev": "node scripts/start.js",
+    "start": "echo gg",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "now-dev": "node scripts/start.js",
