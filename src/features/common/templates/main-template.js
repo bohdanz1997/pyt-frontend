@@ -9,14 +9,19 @@ export const MainTemplate = ({
   children,
   header = null,
   layout: PageLayout = FullScreenLayout,
+  footer = <AppFooter />,
 }) => (
   <PageLayout>
     {header}
     <Content>{children}</Content>
-    <FixedFooter>
-      <Navigation menuItems={menuItems} />
-    </FixedFooter>
+    {footer}
   </PageLayout>
+)
+
+const AppFooter = () => (
+  <FixedFooter>
+    <Navigation menuItems={menuItems} />
+  </FixedFooter>
 )
 
 export const FullScreenLayout = styled(Layout)`

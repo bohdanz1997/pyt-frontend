@@ -11,5 +11,5 @@ export {
 export { NotFoundPage } from './pages/not-found'
 export { request } from './request'
 export { tokenChanged } from './model/token'
-export { sessionDropped, loadSession } from './model/session'
+export { sessionDropped, loadSession, $isAuthenticated, $session } from './model/session'
 export { mapApiError } from './lib'

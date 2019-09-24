@@ -6,4 +6,6 @@ export const accountApi = {
 
 export const sessionApi = {
   createSession: (data) => request('POST', '/users/session', { data }),
+
+  dropSession: () => request('DELETE', '/users/session'),
 }

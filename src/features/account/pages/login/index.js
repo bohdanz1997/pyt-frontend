@@ -1,23 +1,28 @@
 import React from 'react'
-import { Formik } from 'formik'
 import * as yup from 'yup'
-import { Form } from 'antd'
-import { history } from '@lib/routing'
-import { MainTemplate, Header, tokenChanged } from '@features/common'
-import { Row, Card, ErrorBox, FormInput, FormPassword, PrimaryButton, Col } from '@ui'
-import { accountApi, sessionApi } from '../api'
+import { Button, Card, Form } from 'antd'
+import { Formik } from 'formik'
 
-export const RegisterPage = () => (
-  <MainTemplate header={<Header>Registration</Header>}>
+import { ErrorBox, FormInput, FormPassword, PrimaryButton, Row } from '@ui'
+import { Header, MainTemplate, mapApiError, tokenChanged } from '@features/common'
+import { sessionApi } from '@features/account/api'
+import { history } from '@lib/routing'
+import { Link } from 'react-router-dom'
+
+export const LoginPage = () => (
+  <MainTemplate
+    header={<Header>Login</Header>}
+    footer={null}
+  >
     <Row padding="0.5rem">
       <Card>
-        <RegisterForm />
+        <LoginForm />
       </Card>
     </Row>
   </MainTemplate>
 )
 
-const RegisterForm = () => (
+const LoginForm = () => (
   <Formik
     initialValues={{
       email: '',
@@ -63,9 +68,14 @@ const RegisterForm = () => (
           value={values.password}
           error={touched.password && errors.password}
         />
-        <PrimaryButton disabled={isSubmitting}>
-          Sign up
-        </PrimaryButton>
+        <Row gap="1rem">
+          <PrimaryButton disabled={isSubmitting}>
+            Sign in
+          </PrimaryButton>
+          <Link to="/register">
+            <Button size="large">Register</Button>
+          </Link>
+        </Row>
       </Form>
     )}
   </Formik>
@@ -82,7 +92,6 @@ const schema = yup.object().shape({
 
 const handleSubmit = async (values, { setSubmitting, setStatus }) => {
   try {
-    await accountApi.createAccount(values)
     const { result } = await sessionApi.createSession(values)
 
     tokenChanged(result.token)
@@ -96,16 +105,7 @@ const handleSubmit = async (values, { setSubmitting, setStatus }) => {
   }
 }
 
-const mapServerToClientError = (error) => {
-  switch (error) {
-    case 'email_already_exists':
-      return (
-        <span>
-          That email already exists.
-        </span>
-      )
-
-    default:
-      return 'Got an unexpected error. Try again later'
-  }
-}
+const mapServerToClientError = mapApiError({
+  user_not_found: 'User with this email not exist',
+  bad_credentials: 'Wrong password or email',
+})

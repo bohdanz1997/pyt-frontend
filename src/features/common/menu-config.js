@@ -20,7 +20,7 @@ export const menuItems = [
     text: 'Progress',
   },
   {
-    path: '/register',
+    path: '/account',
     icon: 'user',
     text: 'Profile',
   },

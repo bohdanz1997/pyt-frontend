@@ -4,10 +4,10 @@ import { useStore } from 'effector-react'
 import { Loading } from '@ui'
 import { loadExercises, loadGroups } from '@features/exercises'
 import { loadWorkouts } from '@features/workout'
+import { loadTemplates } from '@features/template'
 
 import { $session, loadSession } from '../model/session'
 import { $token } from '../model/token'
-import { loadTemplates } from '@features/template'
 
 export const AccountLoader = ({ children }) => {
   const session = useStore($session)
@@ -25,6 +25,8 @@ export const AccountLoader = ({ children }) => {
     )
 
   useEffect(() => {
+    if (!token) return
+
     setIsLoading(true)
     loadData().finally(() => {
       setIsLoading(false)

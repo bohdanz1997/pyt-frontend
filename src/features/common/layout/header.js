@@ -6,6 +6,7 @@ import { history } from '@lib/routing'
 
 export const Header = styled(Layout.Header)`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background: #fff;
   padding: 0 1rem;
@@ -26,7 +27,9 @@ export const FixedHeader = styled(Header)`
 
 export const NavBackHeader = ({ text }) => (
   <Header>
-    <Icon type="arrow-left" onClick={() => history.goBack()} />
-    <span style={{ marginLeft: 16, fontWeight: 'bold' }}>{text}</span>
+    <span>
+      <Icon type="arrow-left" onClick={() => history.goBack()} />
+      <span style={{ marginLeft: 16, fontWeight: 'bold' }}>{text}</span>
+    </span>
   </Header>
 )
