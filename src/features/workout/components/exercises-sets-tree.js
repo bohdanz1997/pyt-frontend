@@ -1,31 +1,44 @@
 import React from 'react'
 import { Tree } from 'antd'
+import styled from 'styled-components'
+import './exercises-sets-tree.css'
 
 export const ExercisesSetsTree = ({
   exercisesSets,
-  onChange,
+  onSelectSet,
+  onSelectExercise,
 }) => {
   const handleSelect = (selectedKeys) => {
-    // const exerciseIds = selectedKeys.map((key) => Number(key.split('-')[1]))
-    // onChange(exerciseIds)
+    if (!selectedKeys.length) return onSelectExercise(null)
+
+    const [exercise, set] = selectedKeys[0].split('-')
+    if (set) {
+      return onSelectSet(Number(set), Number(exercise))
+    }
+    onSelectExercise(Number(exercise))
   }
 
   return (
     <Tree
       expandedKeys={exercisesSets.map((g) => String(g.id))}
       onSelect={handleSelect}
+      className="ex-tree"
     >
       {exercisesSets
-        .map((exercise) => (
+        .map((exercise, index) => (
           <Tree.TreeNode
             key={exercise.id}
-            title={exercise.name}
-            selectable={false}
+            title={`${index + 1}. ${exercise.name} (${exercise.sets.length})`}
           >
             {exercise.sets.map((set) => (
               <Tree.TreeNode
-                key={`${set.id}-${set.id}`}
-                title={`${set.reps} раз / ${set.weight} кг`}
+                key={`${exercise.id}-${set.id}`}
+                title={
+                  <SetTitle>
+                    <span>{Number(set.weight).toFixed(1)}кг</span>
+                    <span>x{set.reps}</span>
+                  </SetTitle>
+                }
               />
             ))}
           </Tree.TreeNode>
@@ -33,3 +46,9 @@ export const ExercisesSetsTree = ({
     </Tree>
   )
 }
+
+const SetTitle = styled.span`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`

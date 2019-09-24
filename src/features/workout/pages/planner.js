@@ -6,7 +6,7 @@ import { useStore } from 'effector-react'
 import * as colors from '@ant-design/colors/lib'
 
 import { history } from '@lib/routing'
-import { objectFind } from '@lib/object'
+import { objectFind, toSelectOption } from '@lib/object'
 import { useModal } from '@lib/hooks'
 import { MainTemplate } from '@features/common'
 import { mapApiError } from '@features/common/lib'
@@ -20,9 +20,13 @@ const mapCreateWorkoutApiError = mapApiError({
   workout_already_created: 'A workout is already created for selected date',
 })
 
+const $templateOptions = $templates.map((templates) => (
+  templates.map(toSelectOption('name', 'id'))
+))
+
 export const WorkoutPlannerPage = () => {
   const workouts = useStore($registry)
-  const templates = useStore($templates)
+  const templateOptions = useStore($templateOptions)
   const [selectedDate, setSelectedDate] = useState(null)
   const createModal = useModal()
 
@@ -45,11 +49,14 @@ export const WorkoutPlannerPage = () => {
   const workoutCreate = async (templateId) => {
     createModal.close()
     const date = selectedDate || undefined
+    setSelectedDate(null)
+
     try {
-      await createWorkout({
+      const { result } = await createWorkout({
         templateId,
         date,
       })
+      history.push(`/workout/${result.id}`)
     } catch (err) {
       notification.error({
         placement: 'bottomLeft',
@@ -74,11 +81,11 @@ export const WorkoutPlannerPage = () => {
           </div>
         )}
         fullscreen={false}
-        onChange={onDateSelect}
+        onSelect={onDateSelect}
       />
       <CreateWorkoutModal
         visible={createModal.visible}
-        templates={templates}
+        templateOptions={templateOptions}
         onCancel={createModal.close}
         onSubmit={workoutCreate}
       />

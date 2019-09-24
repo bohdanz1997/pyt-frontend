@@ -4,7 +4,7 @@ import { Formik } from 'formik'
 import { Modal } from 'antd'
 import { FormSelect } from '@ui'
 
-export const CreateWorkoutModal = ({ templates, visible, onCancel, onSubmit }) => {
+export const CreateWorkoutModal = ({ templateOptions, visible, onCancel, onSubmit }) => {
   const submit = (values) => {
     onSubmit(values.template.value)
   }
@@ -33,7 +33,7 @@ export const CreateWorkoutModal = ({ templates, visible, onCancel, onSubmit }) =
           <FormSelect
             name="template"
             label="Select template"
-            options={templates.map(({ id, name }) => ({ label: name, value: id }))}
+            options={templateOptions}
             onChange={setFieldValue}
             onBlur={setFieldTouched}
             value={values.template}

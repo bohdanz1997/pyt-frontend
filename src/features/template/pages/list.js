@@ -5,30 +5,34 @@ import { Card, Empty, Icon } from 'antd'
 import { Link } from 'react-router-dom'
 
 import { MainTemplate } from '@features/common'
-import { $exercises } from '@features/exercises'
-import { ActionButton, ConditionalList, Text } from '@ui'
+import { $exercisesRegistry } from '@features/exercises'
+import { ActionButton, ConditionalList, FixedBottom, Row, Text } from '@ui'
 import { $templates, removeTemplate } from '../model'
 
 export const TemplateListPage = () => {
   const templates = useStore($templates)
-  const exercises = useStore($exercises)
+  const exercises = useStore($exercisesRegistry)
 
   return (
     <MainTemplate>
-      <ConditionalList
-        list={templates}
-        renderEmpty={NoTemplates}
-        renderExists={() => (
-          <TemplateList
-            templates={templates}
-            exercises={exercises}
-            onDeleteClick={removeTemplate}
-          />
-        )}
-      />
-      <Link to="/templates/create">
-        <ActionButton icon="plus" />
-      </Link>
+      <Row padding="0.5rem">
+        <ConditionalList
+          list={templates}
+          renderEmpty={NoTemplates}
+          renderExists={(list) => (
+            <TemplateList
+              templates={list}
+              exercises={exercises}
+              onDeleteClick={removeTemplate}
+            />
+          )}
+        />
+      </Row>
+      <FixedBottom>
+        <Link to="/templates/create">
+          <ActionButton icon="plus" />
+        </Link>
+      </FixedBottom>
     </MainTemplate>
   )
 }
@@ -45,7 +49,7 @@ const TemplateList = ({ templates, exercises, onDeleteClick }) => (
       >
         <Text>{template.description}</Text>
         {template.exercises.map((exId) => {
-          const exercise = exercises.find((ex) => ex.id === exId) || {}
+          const exercise = exercises[exId]
           return (
             <Text key={exId}>
               {exercise.name}<br />

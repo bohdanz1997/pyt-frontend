@@ -6,6 +6,8 @@ export const workoutApi = {
 
   getList: () => request('GET', '/workouts'),
 
+  remove: (workoutId) => request('DELETE', `/workouts/${workoutId}`),
+
   addExercise: (workoutId, exerciseId) =>
     request('POST', `/workouts/${workoutId}/exercises`, { data: { exerciseId } }),
 

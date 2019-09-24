@@ -5,19 +5,21 @@ import { Card, Form } from 'antd'
 import { useStore } from 'effector-react'
 
 import { history } from '@lib/routing'
-import { ActionButton, FormInput } from '@ui'
+import { ActionButton, FixedBottom, FormInput, Row } from '@ui'
 import { FixedHeaderTemplate, NavBackHeader } from '@features/common'
-import { $groupsExercises } from '@features/exercises'
-import { ExerciseTreeInput } from '../components/exercise-tree-input'
-import { createTemplate } from '../model'
+import { ExerciseTreeInput } from '../../components/exercise-tree-input'
+import { createTemplate } from '../../model'
+import { $groupsExercises } from './model'
 
 export const CreateTemplatePage = () => (
   <FixedHeaderTemplate header={
     <NavBackHeader text="Create template" />
   }>
-    <Card>
-      <CreateTemplateForm />
-    </Card>
+    <Row padding="0.5rem">
+      <Card>
+        <CreateTemplateForm />
+      </Card>
+    </Row>
   </FixedHeaderTemplate>
 )
 
@@ -64,11 +66,13 @@ const CreateTemplateForm = () => {
             onBlur={setFieldTouched}
             error={errors.exercises}
           />
-          <ActionButton
-            icon="check"
-            loading={isSubmitting}
-            onClick={handleSubmit}
-          />
+          <FixedBottom>
+            <ActionButton
+              icon="check"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            />
+          </FixedBottom>
         </Form>
       )}
     </Formik>

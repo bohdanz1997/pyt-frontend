@@ -1,9 +1,13 @@
 import { createEffect, createStore } from 'effector'
 import { exercisesApi } from '../api'
+import { arrayToObject } from '@lib/array'
 
 export const loadExercises = createEffect()
-export const $exercises = createStore([])
+export const $registry = createStore({})
 
 loadExercises.use(() => exercisesApi.getList())
 
-$exercises.on(loadExercises.done, (_, { result }) => result.result)
+$registry.on(loadExercises.done, (registry, { result }) => ({
+  ...registry,
+  ...arrayToObject(result.result),
+}))

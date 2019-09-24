@@ -1,4 +1,4 @@
 import './model'
 
-export { $exercises, loadExercises } from './model/exercises'
-export { $groups, $groupsExercises, loadGroups } from './model/groups'
+export { $registry as $exercisesRegistry, loadExercises } from './model/exercises'
+export { $registry as $groupsRegistry, loadGroups } from './model/groups'

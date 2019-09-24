@@ -1,23 +1,13 @@
-import { combine, createEffect, createStore } from 'effector'
+import { createEffect, createStore } from 'effector'
+import { arrayToObject } from '@lib/array'
 import { groupsApi } from '../api'
-import { $exercises } from './exercises'
 
 export const loadGroups = createEffect()
-export const $groups = createStore([])
-export const $groupsExercises = combine(
-  $groups,
-  $exercises,
-  (groups, exercises) => (
-    groups.reduce((result, group) => [
-      ...result,
-      ({
-        ...group,
-        exercises: exercises.filter((ex) => ex.groupId === group.id),
-      }),
-    ], [])
-  ),
-)
+export const $registry = createStore({})
 
 loadGroups.use(() => groupsApi.getList())
 
-$groups.on(loadGroups.done, (_, { result }) => result.result)
+$registry.on(loadGroups.done, (registry, { result }) => ({
+  ...registry,
+  ...arrayToObject(result.result),
+}))

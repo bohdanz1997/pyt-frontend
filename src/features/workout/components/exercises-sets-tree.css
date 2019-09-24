@@ -1,0 +1,13 @@
+.ex-tree .ant-tree-child-tree .ant-tree-node-content-wrapper {
+  height: 48px;
+}
+
+.ex-tree li ul {
+  display: flex;
+  align-items: baseline;
+  overflow-x: auto;
+}
+
+.ex-tree li ul .ant-tree-switcher {
+  display: none;
+}
