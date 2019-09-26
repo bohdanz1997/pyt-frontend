@@ -26,7 +26,7 @@ const AppFooter = () => (
 
 export const FullScreenLayout = styled(Layout)`
   min-height: 100vh;
-  padding-bottom: 64px;
+  padding-bottom: 52px;
 `
 
 export const Content = styled(Layout.Content)``

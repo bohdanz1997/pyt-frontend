@@ -8,4 +8,5 @@ export const FixedFooter = styled(Layout.Header)`
   width: 100%;
   background: #fff;
   padding: 0;
+  height: 52px;
 `

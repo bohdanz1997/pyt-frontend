@@ -7,7 +7,7 @@ import { useStore } from 'effector-react'
 import { history } from '@lib/routing'
 import { ActionButton, FixedBottom, FormInput, Row } from '@ui'
 import { Authenticated, FixedHeaderTemplate, NavBackHeader } from '@features/common'
-import { ExerciseTreeInput } from '../../components/exercise-tree-input'
+import { ExerciseTabsInput } from '../../components/exercise-tabs-input'
 import { createTemplate } from '../../model'
 import { $groupsExercises } from './model'
 
@@ -17,7 +17,7 @@ export const CreateTemplatePage = () => (
       <FixedHeaderTemplate header={
         <NavBackHeader text="Create template" />
       }>
-        <Row padding="0.5rem">
+        <Row>
           <Card>
             <CreateTemplateForm />
           </Card>
@@ -56,15 +56,14 @@ const CreateTemplateForm = () => {
         <Form onSubmit={handleSubmit}>
           <FormInput
             name="name"
-            label="Name"
+            placeholder="Template name"
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.name}
             error={touched.name && errors.name}
           />
-          <ExerciseTreeInput
+          <ExerciseTabsInput
             name="exercises"
-            label="Exercises"
             options={groupsExercises}
             onChange={setFieldValue}
             onBlur={setFieldTouched}

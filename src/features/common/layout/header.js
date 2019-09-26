@@ -12,6 +12,7 @@ export const Header = styled(Layout.Header)`
   padding: 0 1rem;
   font-size: 20px;
   font-weight: bold;
+  height: 52px;
 `
 
 Header.propTypes = {

@@ -11,7 +11,7 @@ export const FixedHeaderTemplate = ({ children, header = null }) => (
 )
 
 const FixedHeaderLayout = styled(FullScreenLayout)`
-  padding: 64px 0;
+  padding: 52px 0;
 
   & > header:first-child {
     position: fixed;
