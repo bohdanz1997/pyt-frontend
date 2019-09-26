@@ -5,7 +5,7 @@ import { useStore } from 'effector-react'
 
 import { ActionButton, Col, Row, Text } from '@ui'
 import { range } from '@lib/array'
-import { MainTemplate } from '@features/common'
+import { Authenticated, MainTemplate } from '@features/common'
 
 import { $exercisesSets, $workout, pageMounted } from './model'
 import { $sets, createSet, removeSet, updateSet } from '../../model/set'
@@ -23,9 +23,13 @@ export const WorkoutPage = ({ match }) => {
   }, [id])
 
   return (
-    <MainTemplate>
-      <Editor />
-    </MainTemplate>
+    <Authenticated
+      render={() => (
+        <MainTemplate>
+          <Editor />
+        </MainTemplate>
+      )}
+    />
   )
 }
 

@@ -1,6 +1,7 @@
 import './model'
 
 export { AccountLoader } from './components/account-loader'
+export { Authenticated } from './components/authenticated'
 export { MainTemplate } from './templates/main-template'
 export { FixedHeaderTemplate } from './templates/fixed-header-template'
 export {

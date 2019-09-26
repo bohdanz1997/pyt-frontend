@@ -6,21 +6,25 @@ import { useStore } from 'effector-react'
 
 import { history } from '@lib/routing'
 import { ActionButton, FixedBottom, FormInput, Row } from '@ui'
-import { FixedHeaderTemplate, NavBackHeader } from '@features/common'
+import { Authenticated, FixedHeaderTemplate, NavBackHeader } from '@features/common'
 import { ExerciseTreeInput } from '../../components/exercise-tree-input'
 import { createTemplate } from '../../model'
 import { $groupsExercises } from './model'
 
 export const CreateTemplatePage = () => (
-  <FixedHeaderTemplate header={
-    <NavBackHeader text="Create template" />
-  }>
-    <Row padding="0.5rem">
-      <Card>
-        <CreateTemplateForm />
-      </Card>
-    </Row>
-  </FixedHeaderTemplate>
+  <Authenticated
+    render={() => (
+      <FixedHeaderTemplate header={
+        <NavBackHeader text="Create template" />
+      }>
+        <Row padding="0.5rem">
+          <Card>
+            <CreateTemplateForm />
+          </Card>
+        </Row>
+      </FixedHeaderTemplate>
+    )}
+  />
 )
 
 const CreateTemplateForm = () => {

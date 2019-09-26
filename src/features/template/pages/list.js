@@ -4,7 +4,7 @@ import { useStore } from 'effector-react'
 import { Card, Empty, Icon } from 'antd'
 import { Link } from 'react-router-dom'
 
-import { MainTemplate } from '@features/common'
+import { Authenticated, MainTemplate } from '@features/common'
 import { $exercisesRegistry } from '@features/exercises'
 import { ActionButton, ConditionalList, FixedBottom, Row, Text } from '@ui'
 import { $templates, removeTemplate } from '../model'
@@ -14,26 +14,30 @@ export const TemplateListPage = () => {
   const exercises = useStore($exercisesRegistry)
 
   return (
-    <MainTemplate>
-      <Row padding="0.5rem">
-        <ConditionalList
-          list={templates}
-          renderEmpty={NoTemplates}
-          renderExists={(list) => (
-            <TemplateList
-              templates={list}
-              exercises={exercises}
-              onDeleteClick={removeTemplate}
+    <Authenticated
+      render={() => (
+        <MainTemplate>
+          <Row padding="0.5rem">
+            <ConditionalList
+              list={templates}
+              renderEmpty={NoTemplates}
+              renderExists={(list) => (
+                <TemplateList
+                  templates={list}
+                  exercises={exercises}
+                  onDeleteClick={removeTemplate}
+                />
+              )}
             />
-          )}
-        />
-      </Row>
-      <FixedBottom>
-        <Link to="/templates/create">
-          <ActionButton icon="plus" />
-        </Link>
-      </FixedBottom>
-    </MainTemplate>
+          </Row>
+          <FixedBottom>
+            <Link to="/templates/create">
+              <ActionButton icon="plus" />
+            </Link>
+          </FixedBottom>
+        </MainTemplate>
+      )}
+    />
   )
 }
 

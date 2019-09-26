@@ -8,7 +8,7 @@ import * as colors from '@ant-design/colors/lib'
 import { history } from '@lib/routing'
 import { objectFind, toSelectOption } from '@lib/object'
 import { useModal } from '@lib/hooks'
-import { MainTemplate } from '@features/common'
+import { Authenticated, MainTemplate } from '@features/common'
 import { mapApiError } from '@features/common/lib'
 import { $templates } from '@features/template'
 
@@ -67,29 +67,33 @@ export const WorkoutPlannerPage = () => {
   }
 
   return (
-    <MainTemplate>
-      <Calendar
-        style={{ background: '#fff' }}
-        dateFullCellRender={(date) => (
-          <div className="ant-fullcalendar-date">
-            <WorkoutCell
-              className="ant-fullcalendar-value"
-              busy={Boolean(workoutByDate(date.toDate()))}
-            >
-              {date.date()}
-            </WorkoutCell>
-          </div>
-        )}
-        fullscreen={false}
-        onSelect={onDateSelect}
-      />
-      <CreateWorkoutModal
-        visible={createModal.visible}
-        templateOptions={templateOptions}
-        onCancel={createModal.close}
-        onSubmit={workoutCreate}
-      />
-    </MainTemplate>
+    <Authenticated
+      render={() => (
+        <MainTemplate>
+          <Calendar
+            style={{ background: '#fff' }}
+            dateFullCellRender={(date) => (
+              <div className="ant-fullcalendar-date">
+                <WorkoutCell
+                  className="ant-fullcalendar-value"
+                  busy={Boolean(workoutByDate(date.toDate()))}
+                >
+                  {date.date()}
+                </WorkoutCell>
+              </div>
+            )}
+            fullscreen={false}
+            onSelect={onDateSelect}
+          />
+          <CreateWorkoutModal
+            visible={createModal.visible}
+            templateOptions={templateOptions}
+            onCancel={createModal.close}
+            onSubmit={workoutCreate}
+          />
+        </MainTemplate>
+      )}
+    />
   )
 }
 
