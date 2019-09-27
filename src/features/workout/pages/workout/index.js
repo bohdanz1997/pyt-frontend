@@ -3,7 +3,7 @@ import { Card } from 'antd'
 import styled from 'styled-components'
 import { useStore } from 'effector-react'
 
-import { ActionButton, Col, Row, Text } from '@ui'
+import { ActionButton, Col, FixedActions, Row, Text } from '@ui'
 import { range } from '@lib/array'
 import { Authenticated, MainTemplate } from '@features/common'
 
@@ -156,77 +156,22 @@ const Editor = () => {
           onSelectSet={selectSet}
         />
       </ExercisesSetsCard>
-      <FixedActions
-        renderActions={() => (<>
-          <Action>
-            <ActionText>
-              <span>Юзверь</span>
-            </ActionText>
-            <ActionButton icon="user" size="small" />
-          </Action>
-          <Action>
-            <ActionText>
-              <span>
-                Видалити тренування
-              </span>
-            </ActionText>
-            <ActionButton icon="delete" size="small" onClick={workoutDelete} />
-          </Action>
-        </>)}
+      <WorkoutActions
+        onDeleteClick={workoutDelete}
+        onEditExercisesClick={() => {}}
       />
     </>
   )
 }
 
-const Action = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`
-
-const ActionText = styled.span`
-  position: absolute;
-  right: 60px;
-  min-width: 180px;
-  text-align: right;
-  font-weight: bold;
-  
-  span {
-    background-color: #fff;
-    box-shadow: 1px 1px 3px #00000036;
-    padding: 0.5rem;
-    border-radius: 3px;
-  }
-`
-
-const FixedActions = ({ renderActions }) => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const toggleOpen = () => {
-    setIsOpen(!isOpen)
-  }
-
-  return (
-    <FixedContainer>
-      <Col gap="0.5rem">
-        {isOpen && renderActions() }
-        <ActionButton icon={isOpen ? 'close' : 'edit'} onClick={toggleOpen} />
-      </Col>
-    </FixedContainer>
-  )
-}
-
-const FixedContainer = styled.div`
-  position: fixed;
-  bottom: 80px;
-  right: 16px;
-
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-`
+const WorkoutActions = ({ onDeleteClick, onEditExercisesClick }) => (
+  <FixedActions
+    actions={[
+      { title: 'Редагувати список вправ', icon: 'file', onClick: onEditExercisesClick },
+      { title: 'Видалити тренування', icon: 'delete', onClick: onDeleteClick },
+    ]}
+  />
+)
 
 const ActionsCard = styled(Card)`
   position: fixed;
