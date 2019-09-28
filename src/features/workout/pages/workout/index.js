@@ -3,17 +3,19 @@ import { Card } from 'antd'
 import styled from 'styled-components'
 import { useStore } from 'effector-react'
 
-import { ActionButton, Col, FixedActions, Row, Text } from '@ui'
+import { Col, FixedActions, Row, Text } from '@ui'
 import { range } from '@lib/array'
+import { history } from '@lib/routing'
 import { Authenticated, MainTemplate } from '@features/common'
 
-import { $exercisesSets, $workout, pageMounted } from './model'
-import { $sets, createSet, removeSet, updateSet } from '../../model/set'
 import { NumberPicker } from '../../components/number-picker'
-import { ExercisesSetsTree } from '../../components/exercises-sets-tree'
 import { SetActions } from '../../components/set-actions'
-import { removeWorkout } from '@features/workout/model/workout'
-import { history } from '@lib/routing'
+import { ExercisesSetsTree } from '../../components/exercises-sets-tree'
+import { ExercisesTree } from '../../components/exercises-tree'
+
+import { $exercises, $exercisesSets, $workout, pageMounted } from './model'
+import { $sets, createSet, removeSet, updateSet } from '../../model/set'
+import { removeWorkout } from '../../model/workout'
 
 export const WorkoutPage = ({ match }) => {
   const id = Number(match.params.id)
@@ -37,6 +39,7 @@ const Editor = () => {
   const sets = useStore($sets)
   const workout = useStore($workout)
   const exercisesSets = useStore($exercisesSets)
+  const exercises = useStore($exercises)
 
   const repsValues = useMemo(() => range(1, 50, 1), [])
   const weightValues = useMemo(() => range(0, 200, 2.5), [])
@@ -45,9 +48,8 @@ const Editor = () => {
   const [weight, setWeight] = useState(0)
   const [selectedExercise, setSelectedExercise] = useState(null)
   const [selectedSet, setSelectedSet] = useState(null)
-
-  const isEditting = Boolean(selectedSet)
-  console.log(selectedExercise, selectedSet)
+  const [isExercisesEditting, setExercisesEditing] = useState(false)
+  const isSetEditting = Boolean(selectedSet)
 
   const selectExercise = (exerciseId) => {
     if (setSelectedExercise === exerciseId) return
@@ -112,15 +114,6 @@ const Editor = () => {
       <ActionsCard bodyStyle={{ padding: 12 }}>
         <Row style={{ textAlign: 'center' }}>
           <Col span={12}>
-            <Text strong>Повтори</Text>
-            <NumberPicker
-              disabled={!selectedExercise}
-              values={repsValues}
-              selectedValue={reps}
-              onChange={setReps}
-            />
-          </Col>
-          <Col span={12}>
             <Text strong>Вага (кг)</Text>
             <NumberPicker
               disabled={!selectedExercise}
@@ -129,9 +122,18 @@ const Editor = () => {
               onChange={setWeight}
             />
           </Col>
+          <Col span={12}>
+            <Text strong>Повтори</Text>
+            <NumberPicker
+              disabled={!selectedExercise}
+              values={repsValues}
+              selectedValue={reps}
+              onChange={setReps}
+            />
+          </Col>
         </Row>
         <Row>
-          {isEditting ? (
+          {isSetEditting ? (
             <SetActions
               actions={[
                 { text: 'Оновити', onClick: setUpdate },
@@ -150,15 +152,22 @@ const Editor = () => {
         </Row>
       </ActionsCard>
       <ExercisesSetsCard bodyStyle={{ padding: 12 }}>
-        <ExercisesSetsTree
-          exercisesSets={exercisesSets}
-          onSelectExercise={selectExercise}
-          onSelectSet={selectSet}
-        />
+        {isExercisesEditting ? (
+          <ExercisesTree
+            onSelectExercise={() => {}}
+            exercises={exercises}
+          />
+        ) : (
+          <ExercisesSetsTree
+            exercisesSets={exercisesSets}
+            onSelectExercise={selectExercise}
+            onSelectSet={selectSet}
+          />
+        )}
       </ExercisesSetsCard>
       <WorkoutActions
         onDeleteClick={workoutDelete}
-        onEditExercisesClick={() => {}}
+        onEditExercisesClick={() => setExercisesEditing(!isExercisesEditting)}
       />
     </>
   )

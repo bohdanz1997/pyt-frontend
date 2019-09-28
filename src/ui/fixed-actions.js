@@ -10,11 +10,22 @@ export const FixedActions = ({ actions, renderButton }) => {
   const toggleOpen = () => {
     setIsOpen(!isOpen)
   }
+  const close = () => {
+    setIsOpen(false)
+  }
 
   return (
     <FixedContainer>
       <Col gap="0.5rem">
-        {isOpen && <ActionButtons actions={actions} /> }
+        {isOpen && actions.map((action, index) => (
+          <ActionButtonWrap
+            key={index}
+            title={action.title}
+            icon={action.icon}
+            onClick={action.onClick}
+            onClose={close}
+          />
+        ))}
         {renderButton ? renderButton({ isOpen, toggleOpen }) : (
           <ActionButton icon={isOpen ? 'close' : 'edit'} onClick={toggleOpen} />
         )}
@@ -23,24 +34,27 @@ export const FixedActions = ({ actions, renderButton }) => {
   )
 }
 
-const ActionButtons = ({ actions }) => (
-  <>
-    {actions.map((action, index) => (
-      <Action key={index}>
-        {action.title && (
-          <ActionText onClick={action.onClick}>
-            {action.title}
-          </ActionText>
-        )}
-        <ActionButton
-          icon={action.icon}
-          size="small"
-          onClick={action.onClick}
-        />
-      </Action>
-    ))}
-  </>
-)
+const ActionButtonWrap = ({ title, icon, onClick, onClose }) => {
+  const handleClick = () => {
+    onClick()
+    onClose()
+  }
+
+  return (
+    <Action>
+      {title && (
+        <ActionText onClick={handleClick}>
+          {title}
+        </ActionText>
+      )}
+      <ActionButton
+        icon={icon}
+        size="small"
+        onClick={handleClick}
+      />
+    </Action>
+  )
+}
 
 const FixedContainer = styled.div`
   position: fixed;

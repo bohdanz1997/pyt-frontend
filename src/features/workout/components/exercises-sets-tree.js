@@ -24,25 +24,24 @@ export const ExercisesSetsTree = ({
       onSelect={handleSelect}
       className="ex-tree"
     >
-      {exercisesSets
-        .map((exercise, index) => (
-          <Tree.TreeNode
-            key={exercise.id}
-            title={`${index + 1}. ${exercise.name} (${exercise.sets.length})`}
-          >
-            {exercise.sets.map((set) => (
-              <Tree.TreeNode
-                key={`${exercise.id}-${set.id}`}
-                title={
-                  <SetTitle>
-                    <span>{Number(set.weight).toFixed(1)}кг</span>
-                    <span>x{set.reps}</span>
-                  </SetTitle>
-                }
-              />
-            ))}
-          </Tree.TreeNode>
-        ))}
+      {exercisesSets.map((exercise, index) => (
+        <Tree.TreeNode
+          key={exercise.id}
+          title={`${index + 1}. ${exercise.name} (${exercise.sets.length})`}
+        >
+          {exercise.sets.map((set) => (
+            <Tree.TreeNode
+              key={`${exercise.id}-${set.id}`}
+              title={
+                <SetTitle>
+                  <span>{Number(set.weight).toFixed(1)}кг</span>
+                  <span>x{set.reps}</span>
+                </SetTitle>
+              }
+            />
+          ))}
+        </Tree.TreeNode>
+      ))}
     </Tree>
   )
 }

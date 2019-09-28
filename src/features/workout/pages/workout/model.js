@@ -23,19 +23,23 @@ $workout.watch((workout) => {
 
 export const $setsIsLoading = loadSets.pending.map(((pending) => pending))
 
-export const $exercisesSets = combine(
+export const $exercises = combine(
   $workout,
   $exercisesRegistry,
-  $sets,
-  (workout, exercises, sets) => {
+  (workout, exercises) => {
     if (!workout) {
       return []
     }
-    return (
-      workout.exercises.map((exId) => ({
-        ...exercises[exId],
-        sets: sets.filter((set) => set.exerciseId === exId),
-      }))
-    )
-  },
+    return workout.exercises.map((exId) => exercises[exId])
+  }
+)
+
+export const $exercisesSets = combine(
+  $exercises,
+  $sets,
+  (exercises, sets) => exercises.map((exercise) => ({
+    ...exercise,
+    sets: sets.filter((set) => set.exerciseId === exercise.id),
+  })
+  ),
 )
