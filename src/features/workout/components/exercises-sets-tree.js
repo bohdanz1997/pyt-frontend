@@ -9,13 +9,22 @@ export const ExercisesSetsTree = ({
   onSelectExercise,
 }) => {
   const handleSelect = (selectedKeys) => {
-    if (!selectedKeys.length) return onSelectExercise(null)
+    if (!selectedKeys.length) {
+      return onSelectExercise({
+        exerciseId: null,
+      })
+    }
 
     const [exercise, set] = selectedKeys[0].split('-')
     if (set) {
-      return onSelectSet(Number(set), Number(exercise))
+      return onSelectSet({
+        setId: Number(set),
+        exerciseId: Number(exercise),
+      })
     }
-    onSelectExercise(Number(exercise))
+    onSelectExercise({
+      exerciseId: Number(exercise),
+    })
   }
 
   return (

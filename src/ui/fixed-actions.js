@@ -58,8 +58,8 @@ const ActionButtonWrap = ({ title, icon, onClick, onClose }) => {
 
 const FixedContainer = styled.div`
   position: fixed;
-  bottom: 80px;
-  right: 16px;
+  bottom: 62px;
+  right: 10px;
 
   & > div {
     display: flex;
