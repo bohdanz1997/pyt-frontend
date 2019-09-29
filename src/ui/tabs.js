@@ -1,39 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled, { css } from 'styled-components'
 
-export const Tabs = ({ tabs }) => {
-  const defaultActiveTab = tabs.length ? tabs[0].key : null
-  const [activeTab, setActiveTab] = useState(defaultActiveTab)
-
-  return (
-    <>
-      <TabsNav>
-        {tabs.map((tab) => (
-          <Tab
-            key={tab.key}
-            active={tab.key === activeTab}
-            onClick={() => setActiveTab(tab.key)}
-          >
-            {tab.render ? tab.renderTitle() : tab.title}
-          </Tab>
-        ))}
-      </TabsNav>
-      <TabsContent>
-        {tabs.map((tab) => (
-          <TabPane
-            key={tab.key}
-            active={tab.key === activeTab}
-          >
-            {tab.renderContent ? tab.renderContent() : tab.content}
-          </TabPane>
-        ))}
-      </TabsContent>
-    </>
-  )
-}
-
-const TabsNav = styled.div`
-  overflow-x: auto;
+export const TabsNav = styled.div`
+  overflow-x: scroll;
   white-space: nowrap;
   margin: 0 0 16px 0;
   border-bottom: 1px solid #e8e8e8;
@@ -42,7 +11,7 @@ const TabsNav = styled.div`
   transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 `
 
-const Tab = styled.div`
+export const Tab = styled.div`
   position: relative;
   display: inline-block;
   height: 100%;
@@ -58,9 +27,9 @@ const Tab = styled.div`
   `}
 `
 
-const TabsContent = styled.div``
+export const TabsContent = styled.div``
 
-const TabPane = styled.div`
+export const TabPane = styled.div`
   display: none;
   
   ${(p) => p.active && css`

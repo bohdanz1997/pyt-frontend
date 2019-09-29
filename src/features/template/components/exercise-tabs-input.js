@@ -1,6 +1,7 @@
 import React from 'react'
-import { Form, Tree, List } from 'antd'
-import { FormError, Tabs } from '@ui'
+import { Form, Tree } from 'antd'
+import { useTabs } from '@lib/tabs'
+import { FormError, Tab, TabPane, TabsContent, TabsNav } from '@ui'
 
 export const ExerciseTabsInput = ({
   name,
@@ -18,6 +19,15 @@ export const ExerciseTabsInput = ({
     onBlur(name, true)
   }
 
+  const { tabs } = useTabs(
+    groupsExercises.map((group) => ({
+      ...group,
+      key: group.id,
+      Title: group.name,
+    })),
+    groupsExercises.length ? groupsExercises[0].id: null,
+  )
+
   return (
     <Form.Item
       className={error && 'has-error'}
@@ -26,26 +36,32 @@ export const ExerciseTabsInput = ({
       {(error) && (
         <FormError>{error}</FormError>
       )}
-      <Tabs
-        tabs={groupsExercises.map((group) => ({
-          key: group.id,
-          title: group.name,
-          renderContent: () => (
+
+      <TabsNav>
+        {tabs.map((tab) => (
+          <Tab {...tab.getTitleProps()}>
+            {tab.render('Title')}
+          </Tab>
+        ))}
+      </TabsNav>
+      <TabsContent>
+        {tabs.map((tab) => (
+          <TabPane {...tab.getContentProps()}>
             <Tree
               multiple
               onSelect={handleSelect}
               onBlur={handleBlur}
             >
-              {group.exercises.map((exercise) => (
+              {tab.origin.exercises.map((exercise) => (
                 <Tree.TreeNode
-                  key={`${group.id}-${exercise.id}`}
+                  key={`${tab.key}-${exercise.id}`}
                   title={exercise.name}
                 />
               ))}
             </Tree>
-          ),
-        }))}
-      />
+          </TabPane>
+        ))}
+      </TabsContent>
     </Form.Item>
   )
 }
